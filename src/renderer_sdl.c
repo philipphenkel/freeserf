@@ -10,7 +10,7 @@
 
 #include "freeserf_endian.h"
 #include "list.h"
-#include "sdl-video.h"
+#include "renderer_sdl.h"
 #include "gfx.h"
 #include "misc.h"
 #include "version.h"

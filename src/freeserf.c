@@ -20,10 +20,12 @@
 #include "viewport.h"
 #include "gfx.h"
 #include "data.h"
-#include "sdl-video.h"
+#include "renderer.h"
 #include "misc.h"
 #include "debug.h"
 #include "log.h"
+
+#include "SDL.h"
 
 /* TODO This file is one big of mess of all the things that should really
    be separated out into smaller files.  */
@@ -79,7 +81,7 @@ wait_for_lmb_or_timeout()
 static void
 write_and_swap()
 {
-	sdl_swap_buffers();
+	renderer_swap_buffers();
 }
 
 /* Draw very specific things to specific frames. Not generally useful. */
@@ -2415,7 +2417,7 @@ draw_transport_info_box(player_t *player)
 #if 1
 	/* Draw viewport of flag */
 	frame_t flag_frame;
-	sdl_frame_init(&flag_frame, 8, 24, 128, 64, player->popup_frame);
+	renderer_frame_init(&flag_frame, 8, 24, 128, 64, player->popup_frame);
 
 	viewport_t flag_view = {
 		.x = 8, .y = 24,
@@ -3453,8 +3455,8 @@ static void
 init_players_svga(player_t *p[])
 {
 	globals.frame = &game_area_svga_frame;
-	int width = sdl_frame_get_width(globals.frame);
-	int height = sdl_frame_get_height(globals.frame);
+	int width = renderer_frame_get_width(globals.frame);
+	int height = renderer_frame_get_height(globals.frame);
 
 	/* ADDITION init viewport */
 	viewport.width = width;
@@ -8410,7 +8412,7 @@ draw_player_popup_to_frame(player_t *player)
 	if (BIT_TEST(globals.split, 5)) { /* Demo mode */
 		/* TODO ... */
 	} else {
-		sdl_draw_frame(player->popup_x-8, player->popup_y-9, player->frame,
+		renderer_draw_frame(player->popup_x-8, player->popup_y-9, player->frame,
 			       0, 0, player->popup_frame, 144, 160);
 	}
 }
@@ -10989,8 +10991,8 @@ game_loop_iter()
 
 #if 0
 		/* Clear screen helps debugging */
-		gfx_fill_rect(0, 0, sdl_frame_get_width(player->frame),
-			      sdl_frame_get_height(player->frame),
+		gfx_fill_rect(0, 0, renderer_frame_get_width(player->frame),
+			      renderer_frame_get_height(player->frame),
 			      1, player->frame);
 #endif
 
@@ -10999,7 +11001,7 @@ game_loop_iter()
 		/* player->field_1BE = player->frame_height + 38; */
 
 		viewport_draw(&viewport, player->frame);
-		sdl_mark_dirty(viewport.x, viewport.y, viewport.width, viewport.height);
+		renderer_mark_dirty(viewport.x, viewport.y, viewport.width, viewport.height);
 		/* draw_player_extra_game_objs2(); */
 		redraw_landscape = 0;
 	}
@@ -11014,21 +11016,21 @@ game_loop_iter()
 	/* Mouse cursor */
 	gfx_draw_transp_sprite(globals.player[0]->pointer_x-8,
 			       globals.player[0]->pointer_y-8,
-			       DATA_CURSOR, sdl_get_screen_frame());
+			       DATA_CURSOR, renderer_get_screen_frame());
 
 #if 0
-	draw_green_string(2, 316, sdl_get_screen_frame(), "Col:");
-	draw_green_number(10, 316, sdl_get_screen_frame(), globals.player_sett[0]->map_cursor_col);
+	draw_green_string(2, 316, renderer_get_screen_frame(), "Col:");
+	draw_green_number(10, 316, renderer_get_screen_frame(), globals.player_sett[0]->map_cursor_col);
 
-	draw_green_string(2, 324, sdl_get_screen_frame(), "Row:");
-	draw_green_number(10, 324, sdl_get_screen_frame(), globals.player_sett[0]->map_cursor_row);
+	draw_green_string(2, 324, renderer_get_screen_frame(), "Row:");
+	draw_green_number(10, 324, renderer_get_screen_frame(), globals.player_sett[0]->map_cursor_row);
 
 	map_pos_t cursor_pos = MAP_POS(globals.player_sett[0]->map_cursor_col, globals.player_sett[0]->map_cursor_row);
-	gfx_draw_string(16, 332, 47, 1, sdl_get_screen_frame(), "Height:");
-	gfx_draw_number(80, 332, 47, 1, sdl_get_screen_frame(), MAP_HEIGHT(cursor_pos));
+	gfx_draw_string(16, 332, 47, 1, renderer_get_screen_frame(), "Height:");
+	gfx_draw_number(80, 332, 47, 1, renderer_get_screen_frame(), MAP_HEIGHT(cursor_pos));
 
-	gfx_draw_string(16, 340, 47, 1, sdl_get_screen_frame(), "Object:");
-	gfx_draw_number(80, 340, 47, 1, sdl_get_screen_frame(), MAP_OBJ(cursor_pos));
+	gfx_draw_string(16, 340, 47, 1, renderer_get_screen_frame(), "Object:");
+	gfx_draw_number(80, 340, 47, 1, renderer_get_screen_frame(), MAP_OBJ(cursor_pos));
 #endif
 
 	write_and_swap();
@@ -11045,6 +11047,7 @@ game_loop_iter()
 static void
 game_loop()
 {
+    LOGI("game_loop");
 	/* FPS */
 	int fps = 0;
 	int fps_ema = 0;
@@ -11160,6 +11163,7 @@ game_loop()
 		while (accum >= TICK_LENGTH) {
 			/* This is main_timer_cb */
 			tick += 1;
+
 			/* In original, deep_tree is called which will call update_game.
 			   Here, update_game is just called directly. */
 			update_game();
@@ -11175,8 +11179,8 @@ game_loop()
 
 		game_loop_iter();
 #if 0
-		draw_green_string(6, 10, sdl_get_screen_frame(), "FPS");
-		draw_green_number(10, 10, sdl_get_screen_frame(), fps_ema);
+		draw_green_string(6, 10, renderer_get_screen_frame(), "FPS");
+		draw_green_number(10, 10, renderer_get_screen_frame(), fps_ema);
 #endif
 
 		accum_frames += 1;
@@ -11428,25 +11432,25 @@ hand_out_memory_2()
 	/* Setup frames */
 	/* TODO ... */
 
-	frame_t *screen = sdl_get_screen_frame();
+	frame_t *screen = renderer_get_screen_frame();
 
-	sdl_frame_init(&lowres_full_frame, 0, 0, 352, 240, screen);
-	sdl_frame_init(&lowres_normal_frame, 16, 8, 320, 192, screen);
+	renderer_frame_init(&lowres_full_frame, 0, 0, 352, 240, screen);
+	renderer_frame_init(&lowres_normal_frame, 16, 8, 320, 192, screen);
 
 	/* TODO ...*/
 
-	sdl_frame_init(&svga_full_frame, 0, 0, sdl_frame_get_width(screen),
-		       sdl_frame_get_height(screen), screen);
-	sdl_frame_init(&svga_normal_frame, 0, 0, sdl_frame_get_width(screen),
-		       sdl_frame_get_height(screen), screen);
+	renderer_frame_init(&svga_full_frame, 0, 0, renderer_frame_get_width(screen),
+		       renderer_frame_get_height(screen), screen);
+	renderer_frame_init(&svga_normal_frame, 0, 0, renderer_frame_get_width(screen),
+		       renderer_frame_get_height(screen), screen);
 
 	/* TODO ... */
 
-	sdl_frame_init(&game_area_lowres_frame, 0, 0, 352, 192, screen);
-	sdl_frame_init(&game_area_svga_frame, 0, 0, sdl_frame_get_width(screen),
-		       sdl_frame_get_height(screen), screen);
+	renderer_frame_init(&game_area_lowres_frame, 0, 0, 352, 192, screen);
+	renderer_frame_init(&game_area_svga_frame, 0, 0, renderer_frame_get_width(screen),
+		       renderer_frame_get_height(screen), screen);
 
-	sdl_frame_init(&popup_box_left_frame, 0, 0, 144, 160, NULL);
+	renderer_frame_init(&popup_box_left_frame, 0, 0, 144, 160, NULL);
 	/*sdl_frame_init_new(&popup_box_right_frame, 0, 0, 144, 160);*/
 
 	pregame_init();
@@ -11634,7 +11638,7 @@ main(int argc, char *argv[])
 
 	LOGE("SDL init...");
 
-	r = sdl_init();
+	r = renderer_init();
 	if (r < 0) exit(EXIT_FAILURE);
 
 	/*gfx_set_palette(DATA_PALETTE_INTRO);*/
@@ -11642,7 +11646,7 @@ main(int argc, char *argv[])
 
 	LOGE("SDL resolution %ix%i...\n", screen_width, screen_height);
 
-	r = sdl_set_resolution(screen_width, screen_height, fullscreen);
+	r = renderer_set_resolution(screen_width, screen_height, fullscreen);
 	if (r < 0) exit(EXIT_FAILURE);
 
 	globals.svga |= BIT(7); /* set svga mode */
@@ -11656,7 +11660,7 @@ main(int argc, char *argv[])
 	deep_tree();
 
 	/* Clean up */
-	sdl_deinit();
+	renderer_deinit();
 	gfx_unload();
 
 	return EXIT_SUCCESS;

@@ -19,7 +19,7 @@
 #endif
 
 #include "freeserf_endian.h"
-#include "sdl-video.h"
+#include "renderer.h"
 #include "gfx.h"
 #include "data.h"
 #include "log.h"
@@ -199,10 +199,10 @@ gfx_draw_char_sprite(int x, int y, unsigned int c, int color, int shadow, frame_
 	if (s < 0) return;
 
 	if (shadow) {
-		sdl_draw_transp_sprite(gfx_get_data_object(DATA_FONT_SHADOW_BASE + s, NULL),
+		renderer_draw_transp_sprite(gfx_get_data_object(DATA_FONT_SHADOW_BASE + s, NULL),
 				       x, y, 0, 0, shadow, dest);
 	}
-	sdl_draw_transp_sprite(gfx_get_data_object(DATA_FONT_BASE + s, NULL),
+	renderer_draw_transp_sprite(gfx_get_data_object(DATA_FONT_BASE + s, NULL),
 			       x, y, 0, 0, color, dest);
 }
 
@@ -250,7 +250,7 @@ void
 gfx_draw_sprite(int x, int y, int sprite, frame_t *dest)
 {
 	sprite_t *spr = gfx_get_data_object(sprite, NULL);
-	if (spr != NULL) sdl_draw_sprite(spr, x, y, dest);
+	if (spr != NULL) renderer_draw_sprite(spr, x, y, dest);
 }
 
 /* Draw the transparent sprite with data file index of
@@ -259,14 +259,14 @@ void
 gfx_draw_transp_sprite(int x, int y, int sprite, frame_t *dest)
 {
 	sprite_t *spr = gfx_get_data_object(sprite, NULL);
-	if (spr != NULL) sdl_draw_transp_sprite(spr, x, y, 0, 0, 0, dest);
+	if (spr != NULL) renderer_draw_transp_sprite(spr, x, y, 0, 0, 0, dest);
 }
 
 /* Fill a rectangle with color at x, y in the dest frame. */
 void
 gfx_fill_rect(int x, int y, int width, int height, int color, frame_t *dest)
 {
-	sdl_fill_rect(x, y, width, height, color, dest);
+	renderer_fill_rect(x, y, width, height, color, dest);
 }
 
 /* Perform various fixups of the data file entries. */
@@ -306,7 +306,7 @@ void
 gfx_set_palette(int palette)
 {
 	uint8_t *pal = gfx_get_data_object(palette, NULL);
-	sdl_set_palette(pal);
+	renderer_set_palette(pal);
 }
 
 /* Unpack the uncompressed data of a transparent sprite. */

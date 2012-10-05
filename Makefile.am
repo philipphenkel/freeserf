@@ -13,14 +13,16 @@ freeserf_SOURCES = \
 	src/viewport.c src/viewport.h \
 	src/map.c src/map.h \
 	src/player.c src/player.h \
-	src/sdl-video.c src/sdl-video.h \
+	src/renderer.c src/renderer.h \
+	src/renderer_sdl.c \
 	src/list.c src/list.h \
+	src/log.h \
 	src/misc.h \
 	src/debug.h \
 	src/freeserf_endian.h \
 	src/version.c src/version.h src/version_git.h
 
-AM_CFLAGS = $(SDL_CFLAGS) -I$(top_builddir)/src
+AM_CFLAGS = -DSDL_RENDERER $(SDL_CFLAGS) -I$(top_builddir)/src
 freeserf_LDADD = $(SDL_LIBS) $(SDL_CFLAGS) -lm
 
 VCS_VERSION_FILE = src/version_vcs.h

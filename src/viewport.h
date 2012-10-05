@@ -5,7 +5,7 @@
 
 #include "freeserf.h"
 #include "player.h"
-#include "gfx.h"
+#include "renderer.h"
 #include "map.h"
 
 

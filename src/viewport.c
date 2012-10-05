@@ -10,7 +10,7 @@
 #include "data.h"
 #include "map.h"
 #include "random.h"
-#include "sdl-video.h"
+#include "renderer.h"
 #include "globals.h"
 #include "misc.h"
 #include "debug.h"
@@ -32,7 +32,7 @@ draw_map_tile(int x, int y, int mask, int sprite, frame_t *frame)
 {
 	sprite_t *spr = gfx_get_data_object(sprite, NULL);
 	sprite_t *msk = gfx_get_data_object(mask, NULL);
-	sdl_draw_masked_sprite(spr, x, y, msk, NULL, frame);
+	renderer_draw_masked_sprite(spr, x, y, msk, NULL, frame);
 }
 
 static void
@@ -40,7 +40,7 @@ draw_map_tile_cached(int x, int y, int mask, int sprite, unsigned int index, fra
 {
 	sprite_t *spr = gfx_get_data_object(sprite, NULL);
 	sprite_t *msk = gfx_get_data_object(mask, NULL);
-	map_tile_cache[index] = sdl_draw_masked_sprite(spr, x, y, msk, map_tile_cache[index], frame);
+	map_tile_cache[index] = renderer_draw_masked_sprite(spr, x, y, msk, map_tile_cache[index], frame);
 }
 
 
@@ -271,8 +271,8 @@ draw_landscape(viewport_t *viewport, frame_t *frame)
 		/* Initialize landscape frame. */
 		/* TODO It shouldn't have an alpha channel but sdl_frame_init()
 		   creates the surface with alpha, so we have to fill the frame. */
-		sdl_frame_init(&landscape_frame, 0, 0, map_width, map_height, NULL);
-		sdl_fill_rect(0, 0, map_width, map_height, 72, &landscape_frame);
+		renderer_frame_init(&landscape_frame, 0, 0, map_width, map_height, NULL);
+		renderer_fill_rect(0, 0, map_width, map_height, 72, &landscape_frame);
 		landscape_frame_init = 1;
 		landscape_frame_redraw = 1;
 	}
@@ -294,10 +294,10 @@ draw_landscape(viewport_t *viewport, frame_t *frame)
 
 #if 0
 		/* Draw a border around the tile for debug. */
-		sdl_fill_rect(0, 0, map_width, 2, 76, &landscape_frame);
-		sdl_fill_rect(0, 0, 2, map_height, 76, &landscape_frame);
-		sdl_fill_rect(0, map_height-2, map_width, 2, 76, &landscape_frame);
-		sdl_fill_rect(map_width-2, 0, 2, map_height, 76, &landscape_frame);
+		renderer_fill_rect(0, 0, map_width, 2, 76, &landscape_frame);
+		renderer_fill_rect(0, 0, 2, map_height, 76, &landscape_frame);
+		renderer_fill_rect(0, map_height-2, map_width, 2, 76, &landscape_frame);
+		renderer_fill_rect(map_width-2, 0, 2, map_height, 76, &landscape_frame);
 #endif
 
 		landscape_frame_redraw = 0;
@@ -310,7 +310,7 @@ draw_landscape(viewport_t *viewport, frame_t *frame)
 	while (y < viewport->height) {
 		int x = 0;
 		while (x < viewport->width) {
-			sdl_draw_frame(viewport->x + x, viewport->y + y, frame,
+			renderer_draw_frame(viewport->x + x, viewport->y + y, frame,
 				       (mx + x_base + x) % map_width,
 				       (my + y) % map_height,
 				       &landscape_frame,
@@ -758,7 +758,7 @@ static void
 draw_game_sprite(int x, int y, int index, frame_t *frame)
 {
 	void *sprite = gfx_get_data_object(DATA_GAME_OBJECT_BASE + index, NULL);
-	sdl_draw_transp_sprite(sprite, x, y, 1, 0, 0, frame);
+	renderer_draw_transp_sprite(sprite, x, y, 1, 0, 0, frame);
 }
 
 static void
@@ -769,14 +769,14 @@ draw_serf(int x, int y, int color, int head, int body, frame_t *frame)
 	sprite_t *s_arms = gfx_get_data_object(DATA_SERF_ARMS_BASE + body, NULL);
 	sprite_t *s_torso = gfx_get_data_object(DATA_SERF_TORSO_BASE + body, NULL);
 
-	sdl_draw_transp_sprite(s_arms, x, y, 1, 0, 0, frame);
-	sdl_draw_transp_sprite(s_torso, x, y, 1, 0, c, frame);
+	renderer_draw_transp_sprite(s_arms, x, y, 1, 0, 0, frame);
+	renderer_draw_transp_sprite(s_torso, x, y, 1, 0, c, frame);
 
 	if (head >= 0) {
 		sprite_t *s_head = gfx_get_data_object(DATA_SERF_HEAD_BASE + head, NULL);
 		x += s_arms->b_x;
 		y += s_arms->b_y;
-		sdl_draw_transp_sprite(s_head, x, y, 1, 0, 0, frame);
+		renderer_draw_transp_sprite(s_head, x, y, 1, 0, 0, frame);
 	}
 }
 
@@ -786,8 +786,8 @@ draw_shadow_and_building_sprite(int x, int y, int index, frame_t *frame)
 	void *shadow = gfx_get_data_object(DATA_MAP_SHADOW_BASE + index, NULL);
 	void *building = gfx_get_data_object(DATA_MAP_OBJECT_BASE + index, NULL);
 
-	sdl_draw_overlay_sprite(shadow, x, y, 0, frame);
-	sdl_draw_transp_sprite(building, x, y, 1, 0, 0, frame);
+	renderer_draw_overlay_sprite(shadow, x, y, 0, frame);
+	renderer_draw_transp_sprite(building, x, y, 1, 0, 0, frame);
 }
 
 static void
@@ -799,8 +799,8 @@ draw_shadow_and_building_unfinished(int x, int y, int index, int progress, frame
 	int h = ((building->h * progress) >> 16) + 1;
 	int y_off = building->h - h;
 
-	sdl_draw_overlay_sprite(shadow, x, y, y_off, frame);
-	sdl_draw_transp_sprite(building, x, y, 1, y_off, 0, frame);
+	renderer_draw_overlay_sprite(shadow, x, y, y_off, frame);
+	renderer_draw_transp_sprite(building, x, y, 1, y_off, 0, frame);
 }
 
 static const int map_building_frame_sprite[] = {
@@ -1311,7 +1311,7 @@ static void
 draw_water_waves(map_pos_t pos, int x, int y, frame_t *frame)
 {
 	int sprite = DATA_MAP_WAVES_BASE + (((pos ^ 5) + (globals.anim >> 3)) & 0xf);
-	sdl_draw_waves_sprite(gfx_get_data_object(sprite, NULL), x - 16, y, frame);
+	renderer_draw_waves_sprite(gfx_get_data_object(sprite, NULL), x - 16, y, frame);
 }
 
 static void
@@ -1458,7 +1458,7 @@ draw_row_serf(int x, int y, int shadow, int color, int body, frame_t *frame)
 	/* Shadow */
 	if (shadow) {
 		sprite_t *sh = gfx_get_data_object(DATA_SERF_SHADOW, NULL);
-		sdl_draw_overlay_sprite(sh, x, y, 0, frame);
+		renderer_draw_overlay_sprite(sh, x, y, 0, frame);
 	}
 
 	if (color == 1) color = 2;
@@ -2137,10 +2137,10 @@ draw_base_grid_overlay(viewport_t *viewport, int color, frame_t *frame)
 
 	int row = 0;
 	for (int y = y_base; y < viewport->height; y += MAP_TILE_HEIGHT, row++) {
-		sdl_fill_rect(viewport->x, viewport->y + y, viewport->width, 1, color, frame);
+		renderer_fill_rect(viewport->x, viewport->y + y, viewport->width, 1, color, frame);
 		for (int x = x_base + ((row % 2 == 0) ? 0 : -MAP_TILE_WIDTH/2);
 		     x < viewport->width; x += MAP_TILE_WIDTH) {
-			sdl_fill_rect(viewport->x + x, viewport->y + y - 2, 1, 5, color, frame);
+			renderer_fill_rect(viewport->x + x, viewport->y + y - 2, 1, 5, color, frame);
 		}
 	}
 }
@@ -2170,11 +2170,11 @@ draw_height_grid_overlay(viewport_t *viewport, int color, frame_t *frame)
 
 			/* Draw cross. */
 			if (pos != MAP_POS(0, 0)) {
-				sdl_fill_rect(viewport->x + x, viewport->y + y - 1, 1, 3, color, frame);
-				sdl_fill_rect(viewport->x + x - 1, viewport->y + y, 3, 1, color, frame);
+				renderer_fill_rect(viewport->x + x, viewport->y + y - 1, 1, 3, color, frame);
+				renderer_fill_rect(viewport->x + x - 1, viewport->y + y, 3, 1, color, frame);
 			} else {
-				sdl_fill_rect(viewport->x + x, viewport->y + y - 2, 1, 5, color, frame);
-				sdl_fill_rect(viewport->x + x - 2, viewport->y + y, 5, 1, color, frame);
+				renderer_fill_rect(viewport->x + x, viewport->y + y - 2, 1, 5, color, frame);
+				renderer_fill_rect(viewport->x + x - 2, viewport->y + y, 5, 1, color, frame);
 			}
 
 			if (row % 2 == 0) pos = MAP_MOVE_DOWN(pos);

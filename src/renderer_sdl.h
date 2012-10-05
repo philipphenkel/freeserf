@@ -6,11 +6,25 @@
 #include <stdint.h>
 
 #include "SDL.h"
-
-#include "gfx.h"
-
-
 typedef struct surface surface_t;
+
+/* Frame. Keeps track of a specific rectangular area of a surface.
+   Multiple frames can refer to the same surface. */
+typedef struct {
+	SDL_Surface *surf;
+	SDL_Rect clip;
+} frame_t;
+
+/* Sprite header. In the data file this is immediately followed by sprite data. */
+typedef struct {
+	int8_t b_x;
+	int8_t b_y;
+	uint16_t w;
+	uint16_t h;
+	int16_t x;
+	int16_t y;
+} sprite_t;
+
 
 int sdl_init();
 void sdl_deinit();
