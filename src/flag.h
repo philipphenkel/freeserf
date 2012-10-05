@@ -3,7 +3,7 @@
 #ifndef _FLAG_H
 #define _FLAG_H
 
-#include "freeserf.h"
+#include "core.h"
 #include "list.h"
 #include "map.h"
 

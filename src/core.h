@@ -1,7 +1,7 @@
 /* freeserf.h */
 
-#ifndef _FREESERF_H
-#define _FREESERF_H
+#ifndef _CORE_H_4564363457
+#define _CORE_H_4564363457
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,6 +9,7 @@
 
 #include "gfx.h"
 #include "map.h"
+#include "viewport.h"
 
 #include "building.h"
 #include "serf.h"
@@ -431,4 +432,13 @@ void create_notification_message(int type, map_pos_t pos, int player);
 void calculate_military_flag_state(building_t *building);
 void update_land_ownership(int col, int row);
 
-#endif /* ! _FREESERF_H */
+viewport_t *get_viewport();
+
+void deep_tree(const char *game_file);
+void game_loop_iter();
+void update_game();
+void game_pause();
+void game_unpause();
+void handle_panel_btn_click();
+
+#endif /* ! _CORE_H_4564363457 */

@@ -3,7 +3,8 @@
 bin_PROGRAMS = freeserf
 
 freeserf_SOURCES = \
-	src/freeserf.c src/freeserf.h \
+	src/freeserf.c \
+	src/core.c \
 	src/globals.h \
 	src/serf.c src/serf.h \
 	src/flag.c src/flag.h \

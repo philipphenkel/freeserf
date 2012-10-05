@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include "freeserf.h"
+#include "core.h"
 #include "gfx.h"
 
 

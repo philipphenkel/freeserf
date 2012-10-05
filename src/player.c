@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "freeserf.h"
 #include "player.h"
 
 
