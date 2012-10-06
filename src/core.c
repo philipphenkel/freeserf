@@ -7,6 +7,7 @@
 #include <limits.h>
 #include <unistd.h>
 #include <assert.h>
+#include <time.h>
 
 #include "core.h"
 #include "freeserf_endian.h"
@@ -3297,7 +3298,11 @@ show_intro_screens()
 
 	draw_credits();
 
-	SDL_Delay(400);
+    /* Delay for a bit */
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 400000;
+    nanosleep (&ts, NULL);
 
 	draw_screen_background();
 
