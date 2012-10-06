@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    name="libFreeserf"
+    default="help" >
+
+    <property environment="env" />
+
+    <property
+        name="target"
+        value="android-10" />
+
+    <property
+        name="sdk.dir"
+        value="${env.ANDROID_HOME}" />
+
+    <fail
+        message="sdk.dir is missing. Make sure to generate local.properties using &apos;android update project&apos;"
+        unless="sdk.dir" />
+
+    <presetdef name="javac" >
+
+        <javac includeantruntime="false" />
+    </presetdef>
+
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+
+    <target name="-post-compile" >
+
+        <echo>
+Rename classes.jar to libFreeserf.jar 
+        </echo>
+
+        <move
+            file="bin/classes.jar"
+            tofile="bin/libFreeserf.jar"
+            verbose="true" />
+    </target>
+
+</project>
