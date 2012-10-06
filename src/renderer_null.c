@@ -1,5 +1,6 @@
 #include "log.h"
 #include "renderer_null.h"
+#include "gfx.h"
 
 static frame_t screen;
 

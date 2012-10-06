@@ -4,6 +4,7 @@
 
 // ######## SDL RENDERER ######## ######## ######## ######## ######## ######## ########
 #include "renderer_sdl.h"
+#include "gfx.h"
 
 int
 renderer_init()
@@ -119,6 +120,7 @@ renderer_set_palette(const uint8_t *palette)
 // ######## NULL RENDERER ######## ######## ######## ######## ######## ######## ########
 
 #include "renderer_null.h"
+#include "gfx.h"
 
 int
 renderer_init()

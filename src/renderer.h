@@ -17,11 +17,11 @@ void renderer_frame_init(frame_t *frame, int x, int y, int width, int height, fr
 int renderer_frame_get_width(const frame_t *frame);
 int renderer_frame_get_height(const frame_t *frame);
 
-void renderer_draw_transp_sprite(const sprite_t *sprite, int x, int y, int use_off, int y_off, int color_off, frame_t *dest);
-void renderer_draw_waves_sprite(const sprite_t *sprite, int x, int y, frame_t *dest);
-void renderer_draw_sprite(const sprite_t *sprite, int x, int y, frame_t *dest);
-void renderer_draw_overlay_sprite(const sprite_t *sprite, int x, int y, int y_off, frame_t *dest);
-surface_t *renderer_draw_masked_sprite(const sprite_t *sprite, int x, int y, const sprite_t *mask, surface_t *surface, frame_t *dest);
+void renderer_draw_transp_sprite(const struct sprite *sprite, int x, int y, int use_off, int y_off, int color_off, frame_t *dest);
+void renderer_draw_waves_sprite(const struct sprite *sprite, int x, int y, frame_t *dest);
+void renderer_draw_sprite(const struct sprite *sprite, int x, int y, frame_t *dest);
+void renderer_draw_overlay_sprite(const struct sprite *sprite, int x, int y, int y_off, frame_t *dest);
+surface_t *renderer_draw_masked_sprite(const struct sprite *sprite, int x, int y, const struct sprite *mask, surface_t *surface, frame_t *dest);
 void renderer_draw_frame(int dx, int dy, frame_t *dest, int sx, int sy, frame_t *src, int w, int h);
 void renderer_draw_rect(int x, int y, int width, int height, int color, frame_t *dest);
 void renderer_fill_rect(int x, int y, int width, int height, int color, frame_t *dest);
