@@ -10,6 +10,10 @@
         value="android-10" />
 
     <property
+        name="android.library"
+        value="true" />
+
+    <property
         name="sdk.dir"
         value="${env.ANDROID_HOME}" />
 
@@ -27,7 +31,7 @@
     <target name="-post-compile" >
 
         <echo>
-Rename classes.jar to libFreeserf.jar 
+Rename classes.jar to libFreeserf.jar
         </echo>
 
         <move
