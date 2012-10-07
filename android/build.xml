@@ -28,6 +28,14 @@
 
     <import file="${sdk.dir}/tools/ant/build.xml" />
 
+    <target name="-pre-build">
+        <echo>Build native library</echo>
+        <exec executable="ndk-build" failonerror="true">
+            <arg value="NDK_DEBUG=0"/>
+            <arg value="APP_ABI=armeabi armeabi-v7a"/>
+        </exec>
+    </target>
+
     <target name="-post-compile" >
 
         <echo>
@@ -36,7 +44,7 @@ Rename classes.jar to libFreeserf.jar
 
         <move
             file="bin/classes.jar"
-            tofile="bin/libFreeserf.jar"
+            tofile="libs/libFreeserf.jar"
             verbose="true" />
     </target>
 
