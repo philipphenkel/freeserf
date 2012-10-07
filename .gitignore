@@ -39,3 +39,4 @@ stamp-h1
 #freeserf Android specific
 android/bin
 android/gen
+android/libs
