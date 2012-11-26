@@ -7,12 +7,12 @@ struct sprite;
 typedef int surface_t;
 
 typedef struct {
-	uint16_t clip_x;
-	uint16_t clip_y;
-	uint16_t clip_w;
-	uint16_t clip_h;
-	void* skCanvas;
-	void* skBitmap;
+    uint16_t clip_x;
+    uint16_t clip_y;
+    uint16_t clip_w;
+    uint16_t clip_h;
+    void* skCanvas;
+    void* skBitmap;
 } frame_t;
 
 #ifdef __cplusplus
