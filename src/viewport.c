@@ -254,6 +254,10 @@ static frame_t landscape_frame;
 int landscape_frame_init = 0;
 int landscape_frame_redraw = 0;
 
+frame_t *viewport_get_landscape_frame() {
+	return &landscape_frame;
+}
+
 void
 viewport_redraw_map_pos(map_pos_t pos)
 {
@@ -271,7 +275,6 @@ draw_landscape(viewport_t *viewport, frame_t *frame)
 		/* Initialize landscape frame. */
 		/* TODO It shouldn't have an alpha channel but sdl_frame_init()
 		   creates the surface with alpha, so we have to fill the frame. */
-		renderer_frame_init(&landscape_frame, 0, 0, map_width, map_height, NULL);
 		renderer_fill_rect(0, 0, map_width, map_height, 72, &landscape_frame);
 		landscape_frame_init = 1;
 		landscape_frame_redraw = 1;
@@ -292,7 +295,7 @@ draw_landscape(viewport_t *viewport, frame_t *frame)
 			x_base += MAP_TILE_WIDTH;
 		}
 
-#if 0
+#if 1
 		/* Draw a border around the tile for debug. */
 		renderer_fill_rect(0, 0, map_width, 2, 76, &landscape_frame);
 		renderer_fill_rect(0, 0, 2, map_height, 76, &landscape_frame);

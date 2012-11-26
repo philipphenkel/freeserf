@@ -74,7 +74,7 @@ typedef struct {
 	inventory_t *inventories;
 	uint8_t *inventories_bitmap;
 	/* 108 */
-	frame_t *frame;
+	/* obsolete frame_t *frame; */
 	/* 1C2 */
 	uint16_t map_cols;
 	uint16_t map_rows;

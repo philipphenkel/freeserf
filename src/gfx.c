@@ -315,6 +315,7 @@ gfx_unpack_transparent_sprite(void *dest, const void *src, size_t destlen, int o
 {
 	const uint8_t *bsrc = (uint8_t *)src;
 	uint8_t *bdest = (uint8_t *)dest;
+    memset(dest, 0, destlen);
 
 	int i = 0;
 	int j = 0;
@@ -341,6 +342,7 @@ gfx_unpack_bitmap_sprite(void *dest, const void *src, size_t destlen, int value)
 {
 	const uint8_t *bsrc = (uint8_t *)src;
 	uint8_t *bdest = (uint8_t *)dest;
+	memset(dest, 0, destlen);
 
 	int i = 0;
 	int j = 0;

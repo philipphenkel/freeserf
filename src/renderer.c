@@ -115,6 +115,122 @@ renderer_set_palette(const uint8_t *palette)
     sdl_set_palette(palette);
 }
 
+#elif defined(SKIA_RENDERER)
+
+// ######## SKIA RENDERER ######## ######## ######## ######## ######## ######## ########
+
+#include "renderer_skia.h"
+#include "gfx.h"
+
+int
+renderer_init()
+{
+	return skia_init();
+}
+
+void
+renderer_deinit()
+{
+    skia_deinit();
+}
+
+int renderer_set_resolution
+(int width, int height, int fullscreen)
+{
+	return skia_set_resolution(width, height, fullscreen);
+}
+
+frame_t *
+renderer_get_screen_frame()
+{
+	return skia_get_screen_frame();
+}
+
+void
+renderer_frame_init(frame_t *frame, int x, int y, int width, int height, frame_t *dest)
+{
+    skia_frame_init(frame, x, y, width, height, dest);
+}
+
+int
+renderer_frame_get_width(const frame_t *frame)
+{
+	return skia_frame_get_width(frame);
+}
+
+int
+renderer_frame_get_height(const frame_t *frame)
+{
+	return skia_frame_get_height(frame);
+}
+
+
+void
+renderer_draw_transp_sprite(const sprite_t *sprite, int x, int y, int use_off, int y_off, int color_off, frame_t *dest)
+{
+    skia_draw_transp_sprite(sprite, x, y, use_off, y_off, color_off, dest);
+}
+
+void
+renderer_draw_waves_sprite(const sprite_t *sprite, int x, int y, frame_t *dest)
+{
+    skia_draw_waves_sprite(sprite, x, y, dest);
+}
+
+void
+renderer_draw_sprite(const sprite_t *sprite, int x, int y, frame_t *dest)
+{
+    skia_draw_sprite(sprite, x, y, dest);
+}
+
+void
+renderer_draw_overlay_sprite(const sprite_t *sprite, int x, int y, int y_off, frame_t *dest)
+{
+    skia_draw_overlay_sprite(sprite, x, y, y_off, dest);
+}
+
+surface_t *
+renderer_draw_masked_sprite(const sprite_t *sprite, int x, int y, const sprite_t *mask, surface_t *surface, frame_t *dest)
+{
+	return skia_draw_masked_sprite(sprite, x, y, mask, surface, dest);
+}
+
+void
+renderer_draw_frame(int dx, int dy, frame_t *dest, int sx, int sy, frame_t *src, int w, int h)
+{
+    skia_draw_frame(dx, dy, dest, sx, sy, src, w, h);
+}
+
+void
+renderer_draw_rect(int x, int y, int width, int height, int color, frame_t *dest)
+{
+    skia_draw_rect(x, y, width, height, color, dest);
+}
+
+void
+renderer_fill_rect(int x, int y, int width, int height, int color, frame_t *dest)
+{
+    skia_fill_rect(x, y, width, height, color, dest);
+}
+
+void
+renderer_mark_dirty(int x, int y, int width, int height)
+{
+    skia_mark_dirty(x, y, width, height);
+}
+
+void
+renderer_swap_buffers()
+{
+    skia_swap_buffers();
+}
+
+void
+renderer_set_palette(const uint8_t *palette)
+{
+    skia_set_palette(palette);
+}
+
 #elif defined(NULL_RENDERER)
 
 // ######## NULL RENDERER ######## ######## ######## ######## ######## ######## ########

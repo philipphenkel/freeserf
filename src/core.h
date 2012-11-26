@@ -14,7 +14,6 @@
 #include "building.h"
 #include "serf.h"
 
-
 #define INVENTORY_INDEX(ptr)  ((int)((ptr) - globals.inventories))
 
 #define DIR_REVERSE(dir)  (((dir) + 3) % 6)
@@ -419,6 +418,7 @@ static const int map_building_sprite[] = {
 };
 
 
+
 int init_flag_search();
 
 building_t *get_building(int index);
@@ -432,7 +432,7 @@ void create_notification_message(int type, map_pos_t pos, int player);
 void calculate_military_flag_state(building_t *building);
 void update_land_ownership(int col, int row);
 
-viewport_t *get_viewport();
+viewport_t *core_get_viewport();
 
 void deep_tree(const char *game_file);
 void game_loop_iter();
@@ -440,5 +440,8 @@ void update_game();
 void game_pause();
 void game_unpause();
 void handle_panel_btn_click();
+void enqueue_sfx_clip(sfx_t sfx);
+
+
 
 #endif /* ! _CORE_H_4564363457 */

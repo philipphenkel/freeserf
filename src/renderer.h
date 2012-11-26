@@ -4,6 +4,8 @@
 
 #if defined(SDL_RENDERER)
 # include "renderer_sdl.h"
+#elif defined(SKIA_RENDERER)
+# include "renderer_skia.h"
 #else
 # include "renderer_null.h"
 #endif

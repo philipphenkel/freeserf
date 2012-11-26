@@ -38,5 +38,6 @@ map_pos_t viewport_map_pos_from_screen_pix(viewport_t *viewport, int x, int y);
 
 void viewport_redraw_map_pos(map_pos_t pos);
 
+frame_t *viewport_get_landscape_frame();
 
 #endif /* ! _VIEWPORT_H */
